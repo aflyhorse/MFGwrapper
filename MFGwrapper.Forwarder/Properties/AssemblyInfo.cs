@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MFGwrapper.TCPProxy")]
+[assembly: AssemblyTitle("MFGwrapper.Forwarder")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MFGwrapper.TCPProxy")]
+[assembly: AssemblyProduct("MFGwrapper.Forwarder")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c45a9ce4-4843-4da2-afff-fd47caf0fe26")]
+[assembly: Guid("bb3e2cb3-de46-4019-a8df-760f4fb49591")]
 
 // Version information for an assembly consists of the following four values:
 //
