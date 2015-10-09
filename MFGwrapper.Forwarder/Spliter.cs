@@ -21,14 +21,29 @@ namespace MFGwrapper.Forwarder
             this.ListenPort = ListenPort;
             Fiddler.FiddlerApplication.SetAppDisplayName("MFGwrapper");
             Fiddler.FiddlerApplication.BeforeRequest += FiddlerApplication_BeforeRequest;
+        }
+
+        public void Start()
+        {
             Fiddler.FiddlerApplication.Startup(ListenPort,
-                Fiddler.FiddlerCoreStartupFlags.Default & ~Fiddler.FiddlerCoreStartupFlags.DecryptSSL);
+                Fiddler.FiddlerCoreStartupFlags.ChainToUpstreamGateway & ~Fiddler.FiddlerCoreStartupFlags.DecryptSSL);
         }
 
         private void FiddlerApplication_BeforeRequest(Fiddler.Session oSession)
         {
             oSession.bBufferResponse = false;
             oSession["X-OverrideGateway"] = "localhost:" + UpstreamPort;
+            System.Diagnostics.Debug.WriteLine(oSession.host);
+        }
+
+        public void Stop()
+        {
+            Fiddler.FiddlerApplication.Shutdown();
+        }
+
+        ~Spliter()
+        {
+            Stop();
         }
     }
 }
