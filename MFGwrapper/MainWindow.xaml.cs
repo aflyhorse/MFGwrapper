@@ -86,7 +86,6 @@ auth {
         {
             if (e.Error != null)
                 MessageBox.Show("MFG exited unexpectedly, something went wrong!");
-            spliter.Stop();
             if (RestartService)
             {
                 RestartService = false;
@@ -94,6 +93,7 @@ auth {
             }
             else
             {
+                spliter.Stop();
                 buttonStart.IsEnabled = true;
                 buttonStop.IsEnabled = false;
             }
