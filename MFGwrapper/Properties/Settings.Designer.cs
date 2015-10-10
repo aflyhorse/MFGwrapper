@@ -82,5 +82,17 @@ namespace MFGwrapper.Properties {
                 this["Password"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool FirstBoot {
+            get {
+                return ((bool)(this["FirstBoot"]));
+            }
+            set {
+                this["FirstBoot"] = value;
+            }
+        }
     }
 }

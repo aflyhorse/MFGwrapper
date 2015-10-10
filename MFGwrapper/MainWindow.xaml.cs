@@ -115,6 +115,12 @@ auth {
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            if (Properties.Settings.Default.FirstBoot)
+            {
+                buttonSettings.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                Properties.Settings.Default.FirstBoot = false;
+                Properties.Settings.Default.Save();
+            }
             if (Properties.Settings.Default.AutoStartEnabled)
                 buttonStart.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
         }

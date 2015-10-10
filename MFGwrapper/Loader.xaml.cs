@@ -22,6 +22,7 @@ namespace MFGwrapper
     {
         private readonly System.ComponentModel.BackgroundWorker bgworker;
         private readonly string basepath;
+        private System.Diagnostics.Process proc;
 
         public Uri MFGbinaryUri
         { get; set; } = new Uri("https://myfleetweb.herokuapp.com/redirect/assets/zip/MyFleetGirls.zip");
@@ -75,13 +76,15 @@ namespace MFGwrapper
                     File.Delete(filepath);
                 }
                 bgworker.ReportProgress((int)Status.CheckUpdate);
-                System.Diagnostics.Process p = new System.Diagnostics.Process();
-                p.StartInfo.FileName = "java";
-                p.StartInfo.WorkingDirectory = dirpath;
-                p.StartInfo.Arguments = "-jar update.jar";
-                p.StartInfo.UseShellExecute = false;
-                p.Start();
-                p.WaitForExit();
+                proc = new System.Diagnostics.Process();
+                proc.StartInfo.FileName = "java";
+                proc.StartInfo.WorkingDirectory = dirpath;
+                proc.StartInfo.Arguments = "-jar update.jar";
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.CreateNoWindow = true;
+                proc.Start();
+                proc.WaitForExit();
+                proc.Close();
                 bgworker.ReportProgress((int)Status.Done);
             }
         }
@@ -91,15 +94,15 @@ namespace MFGwrapper
             int ecode = 127;
             try
             {
-                System.Diagnostics.Process p = new System.Diagnostics.Process();
-                p.StartInfo.FileName = "java";
-                p.StartInfo.Arguments = "-version";
-                p.StartInfo.UseShellExecute = false;
-                p.StartInfo.CreateNoWindow = true;
-                p.Start();
-                p.WaitForExit();
-                ecode = p.ExitCode;
-                p.Close();
+                proc = new System.Diagnostics.Process();
+                proc.StartInfo.FileName = "java";
+                proc.StartInfo.Arguments = "-version";
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.CreateNoWindow = true;
+                proc.Start();
+                proc.WaitForExit();
+                ecode = proc.ExitCode;
+                proc.Close();
             }
             catch { }
             return (ecode == 0);
@@ -147,6 +150,9 @@ namespace MFGwrapper
 
         private void buttonCancel_Click(object sender, RoutedEventArgs e)
         {
+            if (proc != null)
+                if (!proc.HasExited)
+                    proc.Kill();
             this.Close();
         }
     }

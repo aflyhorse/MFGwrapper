@@ -17,5 +17,8 @@
     <Setting Name="Password" Type="System.String" Scope="User">
       <Value Profile="(Default)">defaultpwd</Value>
     </Setting>
+    <Setting Name="FirstBoot" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
