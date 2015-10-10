@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Loader" Height="166.917" Width="330.451" Loaded="Window_Loaded">
     <Grid>
-        <Label x:Name="labelStatus" Content="Loading..." HorizontalAlignment="Left" Margin="47,31,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="labelStatus" Content="Loading..." HorizontalAlignment="Left" Margin="23,10,0,0" VerticalAlignment="Top"/>
         <Button x:Name="buttonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="124,92,0,0" VerticalAlignment="Top" Width="75" IsCancel="True" Click="buttonCancel_Click"/>
 
     </Grid>

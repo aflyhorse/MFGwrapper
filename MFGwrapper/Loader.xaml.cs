@@ -123,7 +123,8 @@ namespace MFGwrapper
                     break;
                 case Status.CheckUpdate:
                     labelStatus.Content = "Checking MyFleetGirls Updates." + Environment.NewLine
-                        + "This may take a while, please be Patient.";
+                        + "This may take a while, please be Patient." + Environment.NewLine
+                        + "(Approx. 3 mins on 10Mb cable if update is needed)";
                     break;
                 case Status.Done:
                     labelStatus.Content = "All systems green.";

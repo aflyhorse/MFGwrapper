@@ -25,6 +25,7 @@ namespace MFGwrapper
         private Forwarder.Spliter spliter;
         private readonly string basepath = AppDomain.CurrentDomain.BaseDirectory;
         private System.IO.StreamWriter sw;
+        private bool RestartService = false;
 
         public MainWindow()
         {
@@ -53,7 +54,12 @@ url {
 auth {
     pass: " + Properties.Settings.Default.Password + @"
 }");
-            sw = new System.IO.StreamWriter(System.IO.Path.Combine(basepath, "log.txt"), true);
+            if (System.IO.File.Exists(System.IO.Path.Combine(basepath, "log-lastrun.txt")))
+                System.IO.File.Delete(System.IO.Path.Combine(basepath, "log-lastrun.txt"));
+            if (System.IO.File.Exists(System.IO.Path.Combine(basepath, "log.txt")))
+            System.IO.File.Move(System.IO.Path.Combine(basepath, "log.txt"),
+                System.IO.Path.Combine(basepath, "log-lastrun.txt"));
+            sw = new System.IO.StreamWriter(System.IO.Path.Combine(basepath, "log.txt"));
             proc = new System.Diagnostics.Process();
             proc.StartInfo.FileName = "java";
             proc.StartInfo.Arguments = "-jar MyFleetGirls.jar";
@@ -81,8 +87,16 @@ auth {
             if (e.Error != null)
                 MessageBox.Show("MFG exited unexpectedly, something went wrong!");
             spliter.Stop();
-            buttonStart.IsEnabled = true;
-            buttonStop.IsEnabled = false;
+            if (RestartService)
+            {
+                RestartService = false;
+                (sender as System.ComponentModel.BackgroundWorker).RunWorkerAsync();
+            }
+            else
+            {
+                buttonStart.IsEnabled = true;
+                buttonStop.IsEnabled = false;
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -96,8 +110,13 @@ auth {
             Settings settings = new Settings();
             if (settings.ShowDialog() == true)
             {
-                buttonStop.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-                buttonStart.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                if (spliter != null)
+                {
+                    RestartService = true;
+                    buttonStop.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                }
+                else
+                    buttonStart.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
             }
         }
 
@@ -127,13 +146,17 @@ auth {
 
         private void buttonStop_Click(object sender, RoutedEventArgs e)
         {
+            if (spliter != null)
+                spliter.Stop();
             if (proc != null)
-                proc.Kill();
+                if (!proc.HasExited)
+                    proc.Kill();
         }
 
         private void buttonLog_Click(object sender, RoutedEventArgs e)
         {
-            sw.Flush();
+            if (buttonStop.IsEnabled)
+                sw.Flush();
             System.Diagnostics.Process.Start(System.IO.Path.Combine(basepath, "log.txt"));
         }
     }

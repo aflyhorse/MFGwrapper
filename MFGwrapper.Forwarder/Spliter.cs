@@ -14,6 +14,7 @@ namespace MFGwrapper.Forwarder
         public int ListenPort
         { get; }
         private HashSet<string> HostList;
+        private bool Running = false;
 
         public Spliter(int UpstreamPort, int MFGPort, int ListenPort)
         {
@@ -26,9 +27,14 @@ namespace MFGwrapper.Forwarder
 
         public void Start()
         {
-            HostList = PACparser.Parse();
-            Fiddler.FiddlerApplication.Startup(ListenPort,
-                Fiddler.FiddlerCoreStartupFlags.ChainToUpstreamGateway & ~Fiddler.FiddlerCoreStartupFlags.DecryptSSL);
+            if (!Running)
+            {
+                Running = true;
+                HostList = PACparser.Parse();
+                Fiddler.FiddlerApplication.Startup(ListenPort,
+                    Fiddler.FiddlerCoreStartupFlags.ChainToUpstreamGateway
+                    & ~Fiddler.FiddlerCoreStartupFlags.DecryptSSL);
+            }
         }
 
         private void FiddlerApplication_BeforeRequest(Fiddler.Session oSession)
@@ -43,7 +49,16 @@ namespace MFGwrapper.Forwarder
 
         public void Stop()
         {
-            Fiddler.FiddlerApplication.Shutdown();
+            if (Running)
+            {
+                Fiddler.FiddlerApplication.Shutdown();
+                Running = false;
+            }
+        }
+
+        public bool isRunning()
+        {
+            return Running;
         }
 
         ~Spliter()

@@ -25,6 +25,7 @@ namespace MFGwrapper
             textBoxSS.Text = Properties.Settings.Default.UpstreamPort.ToString();
             textBoxMFG.Text = Properties.Settings.Default.MFGPort.ToString();
             textBoxWrapper.Text = Properties.Settings.Default.ListenPort.ToString();
+            textBoxPassword.Text = Properties.Settings.Default.Password;
         }
 
         private void buttonSave_Click(object sender, RoutedEventArgs e)

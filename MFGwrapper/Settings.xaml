@@ -13,7 +13,7 @@
         <TextBox x:Name="textBoxSS" HorizontalAlignment="Left" Height="23" Margin="132,14,0,0" TextWrapping="Wrap" Text="1080" VerticalAlignment="Top" Width="46" TextAlignment="Right"/>
         <TextBox x:Name="textBoxMFG" HorizontalAlignment="Left" Height="23" Margin="132,45,0,0" TextWrapping="Wrap" Text="8080" VerticalAlignment="Top" Width="46" TextAlignment="Right"/>
         <TextBox x:Name="textBoxWrapper" HorizontalAlignment="Left" Height="23" Margin="132,76,0,0" TextWrapping="Wrap" Text="18080" VerticalAlignment="Top" Width="46" TextAlignment="Right"/>
-        <Button x:Name="buttonSave" Content="Save and Restart MFG" HorizontalAlignment="Left" Margin="26,138,0,0" VerticalAlignment="Top" Width="137" IsDefault="True" Click="buttonSave_Click"/>
+        <Button x:Name="buttonSave" Content="Save and (re)Start MFG" HorizontalAlignment="Left" Margin="26,138,0,0" VerticalAlignment="Top" Width="137" IsDefault="True" Click="buttonSave_Click"/>
         <Button x:Name="buttonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="177,138,0,0" VerticalAlignment="Top" Width="75" IsCancel="True"/>
         <Label Content="Copyright 2015 LunarShaddow, under GPLv3" HorizontalAlignment="Left" Margin="0,163,0,0" VerticalAlignment="Top"/>
         <Label Content="Website Password" HorizontalAlignment="Left" Margin="26,103,0,0" VerticalAlignment="Top"/>
