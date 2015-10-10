@@ -5,17 +5,19 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MFGwrapper"
         mc:Ignorable="d"
-        Title="Settings" Height="191.985" Width="276.361">
+        Title="Settings" Height="220.985" Width="291.361">
     <Grid>
-        <Label x:Name="label" Content="Shadowsocks" HorizontalAlignment="Left" Margin="26,10,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label1" Content="MyFleetGirls" HorizontalAlignment="Left" Margin="26,41,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="label2" Content="MFGwrapper" HorizontalAlignment="Left" Margin="26,72,0,0" VerticalAlignment="Top"/>
+        <Label Content="Shadowsocks" HorizontalAlignment="Left" Margin="26,10,0,0" VerticalAlignment="Top"/>
+        <Label Content="MyFleetGirls" HorizontalAlignment="Left" Margin="26,41,0,0" VerticalAlignment="Top"/>
+        <Label Content="MFGwrapper" HorizontalAlignment="Left" Margin="26,72,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="textBoxSS" HorizontalAlignment="Left" Height="23" Margin="132,14,0,0" TextWrapping="Wrap" Text="1080" VerticalAlignment="Top" Width="46" TextAlignment="Right"/>
         <TextBox x:Name="textBoxMFG" HorizontalAlignment="Left" Height="23" Margin="132,45,0,0" TextWrapping="Wrap" Text="8080" VerticalAlignment="Top" Width="46" TextAlignment="Right"/>
         <TextBox x:Name="textBoxWrapper" HorizontalAlignment="Left" Height="23" Margin="132,76,0,0" TextWrapping="Wrap" Text="18080" VerticalAlignment="Top" Width="46" TextAlignment="Right"/>
-        <Button x:Name="buttonSave" Content="Save" HorizontalAlignment="Left" Margin="26,109,0,0" VerticalAlignment="Top" Width="75" IsDefault="True"/>
-        <Button x:Name="buttonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="118,109,0,0" VerticalAlignment="Top" Width="75" IsCancel="True"/>
-        <Label x:Name="label3" Content="Copyright 2015 LunarShaddow, under GPLv3" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="buttonSave" Content="Save and Restart MFG" HorizontalAlignment="Left" Margin="26,138,0,0" VerticalAlignment="Top" Width="137" IsDefault="True" Click="buttonSave_Click"/>
+        <Button x:Name="buttonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="177,138,0,0" VerticalAlignment="Top" Width="75" IsCancel="True"/>
+        <Label Content="Copyright 2015 LunarShaddow, under GPLv3" HorizontalAlignment="Left" Margin="0,163,0,0" VerticalAlignment="Top"/>
+        <Label Content="Website Password" HorizontalAlignment="Left" Margin="26,103,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBoxPassword" HorizontalAlignment="Left" Height="23" Margin="132,107,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
 
     </Grid>
 </Window>
