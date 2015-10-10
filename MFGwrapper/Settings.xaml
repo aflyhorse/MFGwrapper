@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MFGwrapper"
         mc:Ignorable="d"
-        Title="Settings" Height="220.985" Width="291.361">
+        Title="Settings" Height="239.985" Width="297.361">
     <Grid>
         <Label Content="Shadowsocks" HorizontalAlignment="Left" Margin="26,10,0,0" VerticalAlignment="Top"/>
         <Label Content="MyFleetGirls" HorizontalAlignment="Left" Margin="26,41,0,0" VerticalAlignment="Top"/>
