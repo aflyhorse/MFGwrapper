@@ -26,6 +26,7 @@ namespace MFGwrapper
         private Forwarder.Spliter spliter;
         private readonly string basepath = AppDomain.CurrentDomain.BaseDirectory;
         private System.IO.StreamWriter sw;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
 
         public MainWindow()
         {
@@ -36,6 +37,9 @@ namespace MFGwrapper
             restartworker = new System.ComponentModel.BackgroundWorker();
             restartworker.DoWork += Restartworker_DoWork;
             restartworker.RunWorkerCompleted += Restartworker_RunWorkerCompleted;
+            notifyIcon = new System.Windows.Forms.NotifyIcon();
+            notifyIcon.Icon = Properties.Resources.Kitakami;
+            notifyIcon.Click += NotifyIcon_Click;
         }
 
         private void Bgworker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
@@ -166,6 +170,25 @@ auth {
             if (buttonStop.IsEnabled)
                 sw.Flush();
             System.Diagnostics.Process.Start(System.IO.Path.Combine(basepath, "log.txt"));
+        }
+
+        private void Window_StateChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == WindowState.Minimized)
+            {
+                this.ShowInTaskbar = false;
+                notifyIcon.Visible = true;
+            }
+            else if (this.WindowState == WindowState.Normal)
+            {
+                notifyIcon.Visible = false;
+                this.ShowInTaskbar = true;
+            }
+        }
+
+        private void NotifyIcon_Click(object sender, EventArgs e)
+        {
+            this.WindowState = WindowState.Normal;
         }
     }
 }
