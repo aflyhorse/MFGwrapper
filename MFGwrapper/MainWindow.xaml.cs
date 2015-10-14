@@ -22,10 +22,10 @@ namespace MFGwrapper
     {
         private System.Diagnostics.Process proc;
         private System.ComponentModel.BackgroundWorker bgworker;
+        private System.ComponentModel.BackgroundWorker restartworker;
         private Forwarder.Spliter spliter;
         private readonly string basepath = AppDomain.CurrentDomain.BaseDirectory;
         private System.IO.StreamWriter sw;
-        private bool RestartService = false;
 
         public MainWindow()
         {
@@ -33,10 +33,18 @@ namespace MFGwrapper
             bgworker = new System.ComponentModel.BackgroundWorker();
             bgworker.DoWork += Bgworker_DoWork;
             bgworker.RunWorkerCompleted += Bgworker_RunWorkerCompleted;
+            restartworker = new System.ComponentModel.BackgroundWorker();
+            restartworker.DoWork += Restartworker_DoWork;
+            restartworker.RunWorkerCompleted += Restartworker_RunWorkerCompleted;
         }
 
         private void Bgworker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
+            spliter = new Forwarder.Spliter(
+                Properties.Settings.Default.UpstreamPort,
+                Properties.Settings.Default.MFGPort,
+                Properties.Settings.Default.ListenPort);
+            spliter.Start();
             System.IO.File.WriteAllText(System.IO.Path.Combine(basepath, "MyFleetGirls/application.conf"), @"
 url {
     post: ""https://myfleet.moe""
@@ -75,6 +83,8 @@ auth {
             proc.BeginErrorReadLine();
             proc.WaitForExit();
             sw.Close();
+            spliter.Stop();
+            System.Threading.Thread.Sleep(250);
         }
 
         private void Proc_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e)
@@ -86,17 +96,19 @@ auth {
         {
             if (e.Error != null)
                 MessageBox.Show("MFG exited unexpectedly, something went wrong!");
-            if (RestartService)
-            {
-                RestartService = false;
-                (sender as System.ComponentModel.BackgroundWorker).RunWorkerAsync();
-            }
-            else
-            {
-                spliter.Stop();
-                buttonStart.IsEnabled = true;
-                buttonStop.IsEnabled = false;
-            }
+            spliter.Stop();
+            buttonStart.IsEnabled = true;
+            buttonStop.IsEnabled = false;
+        }
+
+
+        private void Restartworker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            System.Threading.Thread.Sleep(1000);
+        }
+        private void Restartworker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
+        {
+            buttonStart.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -112,8 +124,9 @@ auth {
             {
                 if (spliter != null)
                 {
-                    RestartService = true;
                     buttonStop.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+                    buttonStart.IsEnabled = false;
+                    restartworker.RunWorkerAsync();
                 }
                 else
                     buttonStart.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
@@ -124,11 +137,6 @@ auth {
         {
             buttonStart.IsEnabled = false;
             buttonStop.IsEnabled = true;
-            spliter = new Forwarder.Spliter(
-                Properties.Settings.Default.UpstreamPort,
-                Properties.Settings.Default.MFGPort,
-                Properties.Settings.Default.ListenPort);
-            spliter.Start();
             bgworker.RunWorkerAsync();
         }
 
