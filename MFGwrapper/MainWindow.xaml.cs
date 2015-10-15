@@ -53,13 +53,13 @@ namespace MFGwrapper
 url {
     post: ""https://myfleet.moe""
     proxy {
-            }
-        }
-        proxy {
+    }
+}
+proxy {
     port: " + Properties.Settings.Default.MFGPort + @"
     host: ""localhost""
 }
-    upstream_proxy {
+upstream_proxy {
     port: " + Properties.Settings.Default.UpstreamPort + @"
     host: ""localhost""
 }
@@ -105,7 +105,6 @@ auth {
             buttonStop.IsEnabled = false;
         }
 
-
         private void Restartworker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             System.Threading.Thread.Sleep(1000);
@@ -146,10 +145,10 @@ auth {
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Properties.Settings.Default.FirstBoot)
+            if (Properties.Settings.Default.IsFirstBoot)
             {
                 buttonSettings.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-                Properties.Settings.Default.FirstBoot = false;
+                Properties.Settings.Default.IsFirstBoot = false;
                 Properties.Settings.Default.Save();
             }
             if (Properties.Settings.Default.AutoStartEnabled)
@@ -176,19 +175,23 @@ auth {
         {
             if (this.WindowState == WindowState.Minimized)
             {
-                this.ShowInTaskbar = false;
+                this.Hide();
                 notifyIcon.Visible = true;
-            }
-            else if (this.WindowState == WindowState.Normal)
-            {
-                notifyIcon.Visible = false;
-                this.ShowInTaskbar = true;
             }
         }
 
         private void NotifyIcon_Click(object sender, EventArgs e)
         {
+            if (!this.IsVisible)
+            {
+                this.Show();
+            }
             this.WindowState = WindowState.Normal;
+            this.Activate();
+            this.Topmost = true;
+            this.Topmost = false;
+            this.Focus();
+            notifyIcon.Visible = false;
         }
     }
 }

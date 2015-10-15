@@ -86,12 +86,24 @@ namespace MFGwrapper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool FirstBoot {
+        public bool IsFirstBoot {
             get {
-                return ((bool)(this["FirstBoot"]));
+                return ((bool)(this["IsFirstBoot"]));
             }
             set {
-                this["FirstBoot"] = value;
+                this["IsFirstBoot"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1990-01-01")]
+        public global::System.DateTime LastUpdateChecked {
+            get {
+                return ((global::System.DateTime)(this["LastUpdateChecked"]));
+            }
+            set {
+                this["LastUpdateChecked"] = value;
             }
         }
     }

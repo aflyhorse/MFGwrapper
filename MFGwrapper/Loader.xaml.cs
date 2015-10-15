@@ -51,17 +51,18 @@ namespace MFGwrapper
         private void Bgworker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             var bgworker = sender as System.ComponentModel.BackgroundWorker;
-            bgworker.ReportProgress((int)Status.CheckJava);
-            if (!JavaAvailable())
+            var dirpath = System.IO.Path.Combine(basepath, "MyFleetGirls");
+            if (Properties.Settings.Default.IsFirstBoot)
             {
-                MessageBox.Show("Please download Java Runtime at https://www.java.com/.");
-                bgworker.CancelAsync();
-                this.Close();
-            }
-            else
-            {
+                bgworker.ReportProgress((int)Status.CheckJava);
+                if (!JavaAvailable())
+                {
+                    MessageBox.Show("Please download Java Runtime at https://www.java.com/.");
+                    bgworker.CancelAsync();
+                    this.Close();
+                    return;
+                }
                 bgworker.ReportProgress((int)Status.CheckMFG);
-                var dirpath = System.IO.Path.Combine(basepath, "MyFleetGirls");
                 if (!File.Exists(
                     System.IO.Path.Combine(dirpath, "update.jar")))
                 {
@@ -75,6 +76,9 @@ namespace MFGwrapper
                     System.IO.Compression.ZipFile.ExtractToDirectory(filepath, dirpath);
                     File.Delete(filepath);
                 }
+            }
+            if ((DateTime.Now - Properties.Settings.Default.LastUpdateChecked).TotalDays > 7)
+            {
                 bgworker.ReportProgress((int)Status.CheckUpdate);
                 proc = new System.Diagnostics.Process();
                 proc.StartInfo.FileName = "java";
@@ -85,8 +89,10 @@ namespace MFGwrapper
                 proc.Start();
                 proc.WaitForExit();
                 proc.Close();
-                bgworker.ReportProgress((int)Status.Done);
+                Properties.Settings.Default.LastUpdateChecked = DateTime.Now;
+                Properties.Settings.Default.Save();
             }
+            bgworker.ReportProgress((int)Status.Done);
         }
 
         private bool JavaAvailable()
@@ -139,6 +145,7 @@ namespace MFGwrapper
             if (e.Error == null && !e.Cancelled)
             {
                 MainWindow main = new MainWindow();
+                this.Hide();
                 main.Show();
                 this.Close();
             }
