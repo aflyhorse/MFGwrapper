@@ -23,12 +23,18 @@ namespace MFGwrapper
         private readonly System.ComponentModel.BackgroundWorker bgworker;
         private readonly string basepath;
         private System.Diagnostics.Process proc;
+        static System.Threading.Mutex singleton = new System.Threading.Mutex(true, "MFGWrapper");
 
         public Uri MFGbinaryUri
         { get; set; } = new Uri("https://myfleetweb.herokuapp.com/redirect/assets/zip/MyFleetGirls.zip");
 
         public Loader()
         {
+            if (!singleton.WaitOne(TimeSpan.Zero, true))
+            {
+                MessageBox.Show("You have already opened this app. Please check your system tray.");
+                Application.Current.Shutdown();
+            }
             InitializeComponent();
             bgworker = new System.ComponentModel.BackgroundWorker();
             bgworker.WorkerReportsProgress = true;
