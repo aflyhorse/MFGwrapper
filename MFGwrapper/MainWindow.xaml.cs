@@ -116,6 +116,7 @@ auth {
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Properties.Settings.Default.AutoStartEnabled = (bool)checkBoxAutostart.IsChecked;
             Properties.Settings.Default.Save();
             buttonStop.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
         }
@@ -145,6 +146,7 @@ auth {
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            checkBoxAutostart.IsChecked = Properties.Settings.Default.IsFirstBoot;
             if (Properties.Settings.Default.IsFirstBoot)
             {
                 buttonSettings.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
