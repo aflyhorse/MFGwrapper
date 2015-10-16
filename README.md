@@ -17,7 +17,7 @@ If you meet some problem or have any advice, just feel free to open a new issue.
 
 ### Java 7
 
-_MyFleetGirls_ requires at least _Java 7_. If not, get it from [Oracle](www.java.com).
+_MyFleetGirls_ requires at least _Java 7_. If not, get it from [Oracle](https://www.java.com).
 
 ## License
 
