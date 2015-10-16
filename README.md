@@ -5,19 +5,19 @@ This tool is intended to provide a user-friendly UI for Windows users. It also r
 
 _MyFleetGirls_ only supports HTTP(s) proxy protocol. Please make sure you are using a compatible one.
 
-This project is developed with Visual Studio 2015.
+This project is developed with _Visual Studio_ 2015.
 
 If you meet some problem or have any advice, just feel free to open a new issue.
 
 ## System Requirements
 
-### .NET Framework 4.5
+#### .NET Framework 4.5
 
-**MFGwrapper** depends on _.NET Framework 4.5_, which is already pre-installed on _Windows 8_ or later. If you are running an earlier version of Windows, You may need to install it from [Microsoft Download Center](http://www.microsoft.com/en-us/download/details.aspx?id=42643).
+**MFGwrapper** depends on _.NET Framework_ 4.5, which is already pre-installed on _Windows_ 8 and later. If you are running an earlier version of Windows, You may need to install it from [Microsoft Download Center](http://www.microsoft.com/en-us/download/details.aspx?id=42643).
 
-### Java 7
+#### Java 7
 
-_MyFleetGirls_ requires at least _Java 7_. If not, get it from [Oracle](https://www.java.com).
+_MyFleetGirls_ requires at least _Java_ 7. You can get it from [Oracle](https://www.java.com).
 
 ## License
 
