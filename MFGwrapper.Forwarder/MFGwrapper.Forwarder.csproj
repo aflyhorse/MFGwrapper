@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Nettools.cs" />
     <Compile Include="PACparser.cs" />
     <Compile Include="Spliter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
