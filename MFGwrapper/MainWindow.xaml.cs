@@ -44,12 +44,22 @@ namespace MFGwrapper
 
         private void Bgworker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
-            spliter = new Forwarder.Spliter(
-                Properties.Settings.Default.UpstreamPort,
+            int? inuse = Forwarder.Nettools.isPortInUse(new List<int> {
                 Properties.Settings.Default.MFGPort,
-                Properties.Settings.Default.ListenPort);
-            spliter.Start();
-            System.IO.File.WriteAllText(System.IO.Path.Combine(basepath, "MyFleetGirls/application.conf"), @"
+                Properties.Settings.Default.ListenPort });
+            if (inuse != null)
+            {
+                MessageBox.Show("Port " + inuse + " is already in use!");
+                buttonSettings.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+            }
+            else
+            {
+                spliter = new Forwarder.Spliter(
+                    Properties.Settings.Default.UpstreamPort,
+                    Properties.Settings.Default.MFGPort,
+                    Properties.Settings.Default.ListenPort);
+                spliter.Start();
+                System.IO.File.WriteAllText(System.IO.Path.Combine(basepath, "MyFleetGirls/application.conf"), @"
 url {
     post: ""https://myfleet.moe""
     proxy {
@@ -68,29 +78,30 @@ upstream_proxy {
 auth {
     pass: " + Properties.Settings.Default.Password + @"
 }");
-            if (System.IO.File.Exists(System.IO.Path.Combine(basepath, "log-lastrun.txt")))
-                System.IO.File.Delete(System.IO.Path.Combine(basepath, "log-lastrun.txt"));
-            if (System.IO.File.Exists(System.IO.Path.Combine(basepath, "log.txt")))
-            System.IO.File.Move(System.IO.Path.Combine(basepath, "log.txt"),
-                System.IO.Path.Combine(basepath, "log-lastrun.txt"));
-            sw = new System.IO.StreamWriter(System.IO.Path.Combine(basepath, "log.txt"));
-            proc = new System.Diagnostics.Process();
-            proc.StartInfo.FileName = "java";
-            proc.StartInfo.Arguments = "-jar MyFleetGirls.jar";
-            proc.StartInfo.WorkingDirectory = System.IO.Path.Combine(basepath, "MyFleetGirls");
-            proc.StartInfo.UseShellExecute = false;
-            proc.StartInfo.CreateNoWindow = true;
-            proc.StartInfo.RedirectStandardOutput = true;
-            proc.StartInfo.RedirectStandardError = true;
-            proc.OutputDataReceived += Proc_OutputDataReceived;
-            proc.ErrorDataReceived += Proc_OutputDataReceived;
-            proc.Start();
-            proc.BeginOutputReadLine();
-            proc.BeginErrorReadLine();
-            proc.WaitForExit();
-            sw.Close();
-            spliter.Stop();
-            System.Threading.Thread.Sleep(250);
+                if (System.IO.File.Exists(System.IO.Path.Combine(basepath, "log-lastrun.txt")))
+                    System.IO.File.Delete(System.IO.Path.Combine(basepath, "log-lastrun.txt"));
+                if (System.IO.File.Exists(System.IO.Path.Combine(basepath, "log.txt")))
+                    System.IO.File.Move(System.IO.Path.Combine(basepath, "log.txt"),
+                        System.IO.Path.Combine(basepath, "log-lastrun.txt"));
+                sw = new System.IO.StreamWriter(System.IO.Path.Combine(basepath, "log.txt"));
+                proc = new System.Diagnostics.Process();
+                proc.StartInfo.FileName = "java";
+                proc.StartInfo.Arguments = "-jar MyFleetGirls.jar";
+                proc.StartInfo.WorkingDirectory = System.IO.Path.Combine(basepath, "MyFleetGirls");
+                proc.StartInfo.UseShellExecute = false;
+                proc.StartInfo.CreateNoWindow = true;
+                proc.StartInfo.RedirectStandardOutput = true;
+                proc.StartInfo.RedirectStandardError = true;
+                proc.OutputDataReceived += Proc_OutputDataReceived;
+                proc.ErrorDataReceived += Proc_OutputDataReceived;
+                proc.Start();
+                proc.BeginOutputReadLine();
+                proc.BeginErrorReadLine();
+                proc.WaitForExit();
+                sw.Close();
+                spliter.Stop();
+                System.Threading.Thread.Sleep(250);
+            }
         }
 
         private void Proc_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e)
@@ -102,7 +113,7 @@ auth {
         {
             if (e.Error != null)
                 MessageBox.Show("MFG exited unexpectedly, something went wrong!");
-            spliter.Stop();
+            spliter?.Stop();
             buttonStart.IsEnabled = true;
             buttonStop.IsEnabled = false;
         }
