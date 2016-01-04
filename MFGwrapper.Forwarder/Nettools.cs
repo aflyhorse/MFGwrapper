@@ -9,17 +9,14 @@ namespace MFGwrapper.Forwarder
     {
         public static bool isPortInUse(int port)
         {
-            bool inUse = false;
             var IPEndPoints = System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners();
-            foreach (var IPEndPoint in IPEndPoints)
-            {
-                if (IPEndPoint.Port == port)
-                {
-                    inUse = true;
-                    break;
-                }
-            }
-            return inUse;
+            return (IPEndPoints.FirstOrDefault(i => i.Port == port) != null);
+        }
+
+        public static int? isPortInUse(List<int> ports)
+        {
+            var IPEndPoints = System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners();
+            return IPEndPoints.FirstOrDefault(i => ports.Contains(i.Port))?.Port;
         }
     }
 }

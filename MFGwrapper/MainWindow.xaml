@@ -13,6 +13,5 @@
         <Button x:Name="buttonLog" Content="Show Log" HorizontalAlignment="Left" Margin="37,50,0,0" VerticalAlignment="Top" Width="75" Click="buttonLog_Click"/>
         <CheckBox x:Name="checkBoxAutostart" Content="Autostart MFG Next Time" HorizontalAlignment="Left" Margin="37,86,0,0" VerticalAlignment="Top" />
         <Button x:Name="buttonSettings" Content="Settings" HorizontalAlignment="Left" Margin="142,50,0,0" VerticalAlignment="Top" Width="75" Click="buttonSettings_Click"/>
-
     </Grid>
 </Window>
