@@ -112,7 +112,7 @@ auth {
         private void Bgworker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
             if (e.Error != null)
-                MessageBox.Show("MFG exited unexpectedly, something went wrong!");
+                MessageBox.Show("MFG exited unexpectedly, something went wrong.");
             spliter?.Stop();
             buttonStart.IsEnabled = true;
             buttonStop.IsEnabled = false;
@@ -159,7 +159,7 @@ auth {
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            checkBoxAutostart.IsChecked = Properties.Settings.Default.IsFirstBoot;
+            checkBoxAutostart.IsChecked = Properties.Settings.Default.AutoStartEnabled;
             if (Properties.Settings.Default.IsFirstBoot)
             {
                 buttonSettings.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
@@ -172,8 +172,7 @@ auth {
 
         private void buttonStop_Click(object sender, RoutedEventArgs e)
         {
-            if (spliter != null)
-                spliter.Stop();
+            spliter?.Stop();
             if (proc != null)
                 if (!proc.HasExited)
                     proc.Kill();
