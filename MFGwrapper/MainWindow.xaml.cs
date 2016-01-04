@@ -53,6 +53,8 @@ namespace MFGwrapper
 url {
     post: ""https://myfleet.moe""
     proxy {
+        port: " + Properties.Settings.Default.UpstreamPort + @"
+        host: ""localhost""
     }
 }
 proxy {
