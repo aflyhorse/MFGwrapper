@@ -9,6 +9,7 @@
     <Grid>
         <Label x:Name="labelStatus" Content="Loading..." HorizontalAlignment="Left" Margin="23,10,0,0" VerticalAlignment="Top"/>
         <Button x:Name="buttonCancel" Content="Cancel" HorizontalAlignment="Left" Margin="124,92,0,0" VerticalAlignment="Top" Width="75" IsCancel="True" Click="buttonCancel_Click"/>
+        <Button x:Name="buttonMirror" Content="Try Mirror" HorizontalAlignment="Left" Height="21" Margin="23,91,0,0" VerticalAlignment="Top" Width="60" Click="buttonMirror_Click"/>
 
     </Grid>
 </Window>

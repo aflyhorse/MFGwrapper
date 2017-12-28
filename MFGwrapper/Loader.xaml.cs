@@ -25,8 +25,13 @@ namespace MFGwrapper
         private System.Diagnostics.Process proc;
         static System.Threading.Mutex singleton = new System.Threading.Mutex(true, "MFGWrapper");
 
-        public Uri MFGbinaryUri
+        public Uri MFGupdaterUri
         { get; set; } = new Uri("https://myfleetweb.herokuapp.com/redirect/assets/zip/MyFleetGirls.zip");
+
+        public Uri MFGmirrorUri
+        { get; set; } = new Uri("http://lunes.faith/MFG/MyFleetGirls.jar.zip");
+
+        private bool RestartWithMirror = false;
 
         public Loader()
         {
@@ -36,6 +41,7 @@ namespace MFGwrapper
                 Application.Current.Shutdown();
             }
             InitializeComponent();
+            buttonMirror.Visibility = Visibility.Hidden;
             bgworker = new System.ComponentModel.BackgroundWorker();
             bgworker.WorkerReportsProgress = true;
             bgworker.WorkerSupportsCancellation = true;
@@ -51,6 +57,7 @@ namespace MFGwrapper
             CheckMFG,
             DownloadMFG,
             CheckUpdate,
+            MirrorUpdate,
             Done
         }
 
@@ -58,7 +65,8 @@ namespace MFGwrapper
         {
             var bgworker = sender as System.ComponentModel.BackgroundWorker;
             var dirpath = System.IO.Path.Combine(basepath, "MyFleetGirls");
-            if (Properties.Settings.Default.IsFirstBoot)
+            if (Properties.Settings.Default.IsFirstBoot ||
+                !File.Exists(System.IO.Path.Combine(dirpath, "update.jar")))
             {
                 bgworker.ReportProgress((int)Status.CheckJava);
                 if (!JavaAvailable())
@@ -74,16 +82,30 @@ namespace MFGwrapper
                 {
                     bgworker.ReportProgress((int)Status.DownloadMFG);
                     var filepath = System.IO.Path.Combine(basepath,
-                            System.IO.Path.GetFileName(MFGbinaryUri.AbsolutePath));
+                            System.IO.Path.GetFileName(MFGupdaterUri.AbsolutePath));
                     var client = new System.Net.WebClient();
-                    client.DownloadFile(MFGbinaryUri, filepath);
+                    client.DownloadFile(MFGupdaterUri, filepath);
                     if (!Directory.Exists(dirpath))
                         Directory.CreateDirectory(dirpath);
                     System.IO.Compression.ZipFile.ExtractToDirectory(filepath, dirpath);
                     File.Delete(filepath);
                 }
             }
-            if ((DateTime.Now - Properties.Settings.Default.LastUpdateChecked).TotalDays > 7)
+            if (RestartWithMirror)
+            {
+                bgworker.ReportProgress((int)Status.MirrorUpdate);
+                var filepath = System.IO.Path.Combine(basepath,
+                            System.IO.Path.GetFileName(MFGmirrorUri.AbsolutePath));
+                var client = new System.Net.WebClient();
+                client.DownloadFile(MFGmirrorUri, filepath);
+                if (File.Exists(System.IO.Path.Combine(dirpath, "MyFleetGirls.jar")))
+                    File.Delete(System.IO.Path.Combine(dirpath, "MyFleetGirls.jar"));
+                System.IO.Compression.ZipFile.ExtractToDirectory(filepath, dirpath);
+                File.Delete(filepath);
+                RestartWithMirror = false;
+            }
+            if (!File.Exists(System.IO.Path.Combine(dirpath, "MyFleetGirls.jar")) ||
+                (DateTime.Now - Properties.Settings.Default.LastUpdateChecked).TotalDays > 1)
             {
                 bgworker.ReportProgress((int)Status.CheckUpdate);
                 proc = new System.Diagnostics.Process();
@@ -137,9 +159,16 @@ namespace MFGwrapper
                     labelStatus.Content = "Checking MyFleetGirls Updates." + Environment.NewLine
                         + "This may take a while, please be Patient." + Environment.NewLine
                         + "(Approx. 3 mins on 10Mb cable if update is needed)";
+                    buttonMirror.Visibility = Visibility.Visible;
+                    break;
+                case Status.MirrorUpdate:
+                    labelStatus.Content = "Try alternative mirror instead..." + Environment.NewLine
+                        + "This might be faster.";
+                    buttonMirror.Visibility = Visibility.Hidden;
                     break;
                 case Status.Done:
                     labelStatus.Content = "All systems green.";
+                    buttonMirror.Visibility = Visibility.Hidden;
                     break;
                 default:
                     throw new NotImplementedException();
@@ -148,7 +177,9 @@ namespace MFGwrapper
 
         private void Bgworker_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
         {
-            if (e.Error == null && !e.Cancelled)
+            if (RestartWithMirror)
+                bgworker.RunWorkerAsync();
+            else if (e.Error == null && !e.Cancelled)
             {
                 MainWindow main = new MainWindow();
                 this.Hide();
@@ -168,6 +199,14 @@ namespace MFGwrapper
                 if (!proc.HasExited)
                     proc.Kill();
             this.Close();
+        }
+
+        private void buttonMirror_Click(object sender, RoutedEventArgs e)
+        {
+            RestartWithMirror = true;
+            if (proc != null)
+                if (!proc.HasExited)
+                    proc.Kill();
         }
     }
 }
