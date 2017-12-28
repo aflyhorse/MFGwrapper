@@ -182,7 +182,11 @@ auth {
         {
             if (buttonStop.IsEnabled)
                 sw.Flush();
-            System.Diagnostics.Process.Start(System.IO.Path.Combine(basepath, "log.txt"));
+            var logpath = System.IO.Path.Combine(basepath, "log.txt");
+            if (!System.IO.File.Exists(logpath))
+                MessageBox.Show("No log available yet.");
+            else
+                System.Diagnostics.Process.Start(logpath);
         }
 
         private void Window_StateChanged(object sender, EventArgs e)
