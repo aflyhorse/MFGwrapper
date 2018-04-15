@@ -11,9 +11,9 @@ If you meet some problem or have any advice, just feel free to open a new issue.
 
 ## System Requirements
 
-#### .NET Framework 4.5
+#### .NET Framework 4.5+
 
-**MFGwrapper** depends on _.NET Framework_ 4.5, which is already pre-installed on _Windows_ 8 and later. If you are running an earlier version of Windows, You may need to install it from [Microsoft Download Center](http://www.microsoft.com/en-us/download/details.aspx?id=42643).
+**MFGwrapper** depends on _.NET Framework_ (>=4.5) , which is already pre-installed on _Windows_ 8 and later. If you are running an earlier version of Windows, You may need to install it from [Microsoft Download Center](https://www.microsoft.com/en-us/download/details.aspx?id=56115).
 
 #### Java 7
 
